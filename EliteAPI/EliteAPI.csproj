@@ -28,6 +28,7 @@ VoiceAttack, VoiceMacro, Discord, C#, VB</Description>
   <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.143.0" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Somfic" Version="1.2.0-alpha7" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
