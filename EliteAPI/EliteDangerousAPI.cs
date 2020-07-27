@@ -134,6 +134,8 @@ namespace EliteAPI
             JournalReader.StopWatching();
 
             Logger.Debug("Stopping EliteAPI.");
+
+            OnQuit?.Invoke(this, EventArgs.Empty);
         }
 
         public void Reset()
@@ -156,6 +158,8 @@ namespace EliteAPI
             Location = new LocationService(this);
             Discord = new DiscordService(this);
             StatusExtension = new StatusExtensionService(this);
+
+            OnReset?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
