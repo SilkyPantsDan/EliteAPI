@@ -204,7 +204,7 @@
             <summary>
             The label of the modifier.
             </summary>
-            <see cref="!:EngineeringLoadOutModifier"/>
+            <see cref="T:EliteAPI.Events.Startup.EngineeringLoadOutModifier"/>
         </member>
         <member name="T:EliteAPI.Events.ScanType">
             <summary>
