@@ -1,35 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
 namespace EliteAPI.EDSM
 {
     public class EDSMConnection
     {
-        /// <summary>
-        /// Executes an EDSM API request.
-        /// </summary>
-        /// <param name="entry">The entry to process.</param>
-        /// <returns></returns>
-        public string Execute(EDSMEntry entry) => Execute(entry.Url, entry.Parameters);
-        private string Execute(string url, List<EDSMParameter> Parameters)
+        private readonly string apiBase = "https://www.edsm.net";
+        private readonly HttpClient apiClient;
+
+        EDSMConnection()
         {
-            string html = "";
-            string returnHtml = "";
-            //Convert the list to a HTML query.
-            List<string> parametersLocalised = new List<string>();
-            Parameters.ForEach(x => parametersLocalised.Add($"{x.Name}={x.Value.ToString()}"));
-            html = $"{url}?{string.Join("&", parametersLocalised)}";
-            //Preform the GET request.
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(html);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            apiClient = new HttpClient
             {
-                returnHtml = reader.ReadToEnd();
+                BaseAddress = new Uri(apiBase),
+                MaxResponseContentBufferSize = 256000
+            };
+        }
+        
+
+        /// <summary>
+        /// Executes a generic EDSM API request.
+        /// </summary>
+        /// <param name="request">The HTTP Request to process.</param>
+        /// <returns></returns>
+        private async Task<T> SendRequestMessage<T>(HttpRequestMessage request)
+        {
+            var response = await apiClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"CONTENT FROM {request.RequestUri.ToString()}");
+                Console.WriteLine(content);
+                Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                return JsonConvert.DeserializeObject<T>(content);
             }
-            return returnHtml;
+
+            return default;
+        }
+
+        public async Task<List<string>> GetDiscardedEventTypes() 
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("/api-journal-v1/discard"),
+                Method = HttpMethod.Get
+            };
+
+            return await SendRequestMessage<List<string>>(request);
         }
     }
 }
