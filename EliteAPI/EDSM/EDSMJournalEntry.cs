@@ -5,7 +5,7 @@ namespace EliteAPI.EDSM
 {
     public class EDSMJournalEntry
     {
-        public EDSMJournalEntry(EDSMConfiguration configuration, List<Events.EventBase> journalEvents)
+        public EDSMJournalEntry(EDSMConfiguration configuration, IEnumerable<Events.EventBase> journalEvents)
         {
             Events = journalEvents;
             CommanderName = configuration.CommanderName;
@@ -22,6 +22,6 @@ namespace EliteAPI.EDSM
         [JsonProperty("commanderName")]
         public string CommanderName { get; internal set; }
         [JsonProperty("message")]
-        public List<Events.EventBase> Events { get; internal set; }
+        public IEnumerable<Events.EventBase> Events { get; internal set; }
     }
 }

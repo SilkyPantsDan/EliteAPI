@@ -4,63 +4,19 @@
         <name>EliteAPI</name>
     </assembly>
     <members>
-        <member name="M:EliteAPI.EDSM.EDSMConnection.Execute(EliteAPI.EDSM.EDSMEntry)">
+        <member name="M:EliteAPI.EDSM.EDSMConnection.SendRequestMessage(System.Net.Http.HttpRequestMessage)">
             <summary>
-            Executes an EDSM API request.
+            Executes a generic EDSM API request.
             </summary>
-            <param name="entry">The entry to process.</param>
+            <param name="request">The HTTP Request to process.</param>
             <returns></returns>
         </member>
-        <member name="T:EliteAPI.EDSM.EDSMEntry">
+        <member name="M:EliteAPI.EDSM.EDSMConnection.SendRequestMessage``1(System.Net.Http.HttpRequestMessage)">
             <summary>
-            An entry for the EDSM API.
+            Executes a generic EDSM API request.
             </summary>
-        </member>
-        <member name="M:EliteAPI.EDSM.EDSMEntry.#ctor(System.String,EliteAPI.EDSM.EDSMParameter)">
-            <summary>
-            Creates a new EDSM API entry.
-            </summary>
-            <param name="url">The base URL for the API call.</param>
-            <param name="parameter">The parameters for the API call.</param>
-        </member>
-        <member name="M:EliteAPI.EDSM.EDSMEntry.#ctor(System.String,System.Collections.Generic.List{EliteAPI.EDSM.EDSMParameter})">
-            <summary>
-            Creates a new EDSM API entry.
-            </summary>
-            <param name="url">The base URL for the API call.</param>
-            <param name="parameters">A list of parameters for the API call.</param>
-        </member>
-        <member name="P:EliteAPI.EDSM.EDSMEntry.Url">
-            <summary>
-            The base URL of the API call.
-            </summary>
-        </member>
-        <member name="P:EliteAPI.EDSM.EDSMEntry.Parameters">
-            <summary>
-            The list of parameters for the API call.
-            </summary>
-        </member>
-        <member name="T:EliteAPI.EDSM.EDSMParameter">
-            <summary>
-            A parameter for an EDSM API call.
-            </summary>
-        </member>
-        <member name="M:EliteAPI.EDSM.EDSMParameter.#ctor(System.String,System.Object)">
-            <summary>
-            Creates a new EDSM parameter.
-            </summary>
-            <param name="name">The name of the parameter.</param>
-            <param name="value">The value of the parameter.</param>
-        </member>
-        <member name="P:EliteAPI.EDSM.EDSMParameter.Name">
-            <summary>
-            The name of the parameter.
-            </summary>
-        </member>
-        <member name="P:EliteAPI.EDSM.EDSMParameter.Value">
-            <summary>
-            The value of the parameter.
-            </summary>
+            <param name="request">The HTTP Request to process.</param>
+            <returns></returns>
         </member>
         <member name="P:EliteAPI.EliteConfiguration.UseDiscordRichPresence">
             <summary>
