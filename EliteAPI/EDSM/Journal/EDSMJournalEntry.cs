@@ -1,27 +1,26 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace EliteAPI.EDSM.Journal
 {
-    public class EDSMJournalEntry
+    interface IEDSMGameStatus
     {
-        public EDSMJournalEntry(EDSMConfiguration configuration, IEnumerable<Events.EventBase> journalEvents)
-        {
-            Events = journalEvents;
-            CommanderName = configuration.CommanderName;
-            ApiKey = configuration.ApiKey;
-            AppName = configuration.AppName;
-            AppVersion = configuration.AppVersion;
-        }
-        [JsonProperty("fromSoftware")]
-        public string AppName { get; internal set; }
-        [JsonProperty("fromSoftwareVersion")]
-        public string AppVersion { get; internal set; }
-        [JsonProperty("apiKey")]
-        public string ApiKey { get; internal set; }
-        [JsonProperty("commanderName")]
-        public string CommanderName { get; internal set; }
-        [JsonProperty("message")]
-        public IEnumerable<Events.EventBase> Events { get; internal set; }
+        long? SystemId { get; set; }
+        string SystemName { get; set; }
+        List<float> SystemCoordinates { get; set; }
+        long? StationId { get; set; }
+        string StationName { get; set; }
+        long? ShipId { get; set; }
     }
+
+    public class EDSMJournalEntry : Dictionary<string, dynamic>, IEDSMGameStatus
+    {
+
+        public long? SystemId { get => this["_systemAddress"]; set => this["_systemAddress"] = value; }
+        public string SystemName { get => this["_systemName"]; set => this["_systemName"] = value; }
+        public List<float> SystemCoordinates { get => this["_systemCoordinates"]; set => this["_systemCoordinates"] = value; }
+        public long? StationId { get => this["_marketId"]; set => this["_marketId"] = value; }
+        public string StationName { get => this["_stationName"]; set => this["_stationName"] = value; }
+        public long? ShipId { get => this["_shipId"]; set => this["_shipId"] = value; }
+    }
+
 }

@@ -16,7 +16,7 @@ namespace EliteAPI.EDSM
         public EDSMConfiguration Configuration { get; internal set; }
         private List<string> DiscardEvents = new List<string>();
 
-        public EDSMConnection(EDSMConfiguration configuration, HttpMessageHandler messageHandler = null)
+        public EDSMConnection(EDSMConfiguration configuration = null, HttpMessageHandler messageHandler = null)
         {
             Configuration = configuration;
 
@@ -66,8 +66,10 @@ namespace EliteAPI.EDSM
 
         public async Task<string> UploadJournalEvents(List<Events.EventBase> events) 
         {
+            if (this.Configuration == null) return ""; // TODO: Throw Exception
+
             var filteredEvents = events.Where(x => !this.DiscardEvents.Contains(x.Event));
-            var journalEvent = new EDSMJournalEntry(this.Configuration, filteredEvents);
+            var journalEvent = new EDSMJournalRequest(this.Configuration, filteredEvents);
             var json = JsonConvert.SerializeObject(journalEvent);
 
             var request = new HttpRequestMessage

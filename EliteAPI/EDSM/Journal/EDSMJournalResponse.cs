@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace EliteAPI.EDSM.Journal
 {
-    public class EDSMJournalEntryResponse
+    public class EDSMJournalResponse
     {
         [JsonProperty("msgnum")]
         public long MessageStatus { get; internal set; }
