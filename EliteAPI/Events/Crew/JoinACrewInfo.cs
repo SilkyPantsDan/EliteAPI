@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace EliteAPI.Events
 {
-    public class JoinACrewInfo : EventBase
+    public class JoinACrewInfo : EventBase, ICrewInfo
     {
         [JsonProperty("Captain")]
         public string Captain { get; internal set; }
