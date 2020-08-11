@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using EliteAPI.EDSM.Journal;
 using Newtonsoft.Json;
 
 namespace EliteAPI.EDSM

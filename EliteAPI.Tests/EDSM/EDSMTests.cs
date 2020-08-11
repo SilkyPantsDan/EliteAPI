@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-using EliteAPI.EDSM;
+using EliteAPI.Tests.Utilities;
 
 namespace EliteAPI.EDSM.Tests
 {

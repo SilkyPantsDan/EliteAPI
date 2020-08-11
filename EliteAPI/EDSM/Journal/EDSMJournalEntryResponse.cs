@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace EliteAPI.EDSM
+namespace EliteAPI.EDSM.Journal
 {
     public class EDSMJournalEntryResponse
     {
