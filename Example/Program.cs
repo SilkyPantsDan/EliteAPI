@@ -1,5 +1,4 @@
 ﻿using EliteAPI;
-using EliteAPI.Discord;
 using Somfic.Logging;
 
 using System.IO;
@@ -15,7 +14,8 @@ namespace Example
         private static void Main(string[] args)
         {
             Logger.AddHandler(new ConsoleHandler());
-            EliteAPI = new EliteDangerousAPI(new DirectoryInfo(@"\\DESKTOP-RRQICPT\Users\Lucas\Saved Games\Frontier Developments\Elite Dangerous"));
+            var config = new EliteConfiguration(@"\\DESKTOP-RRQICPT\Users\Lucas\Saved Games\Frontier Developments\Elite Dangerous");
+            EliteAPI = new EliteDangerousAPI(config);
 
             EliteAPI.Start();
 
