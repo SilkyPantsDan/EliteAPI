@@ -1,4 +1,5 @@
 ﻿using EliteAPI.Service.Discord;
+using EliteAPI.Service.EDSM;
 using EliteAPI.Service.Location;
 using EliteAPI.Service.StatusExtension;
 using EliteAPI.Status.Cargo;
@@ -56,6 +57,8 @@ namespace EliteAPI
         public LocationService Location { get; private set; }
 
         public DiscordService Discord { get; private set; }
+
+        public EDSMService EDSMApi { get; private set; }
 
         internal static IEnumerable<string> SupportFiles => Enum.GetNames(typeof(SupportFile)).Select(x => x.ToString() + ".json");
 
@@ -146,6 +149,9 @@ namespace EliteAPI
                 Stop();
             }
 
+            // Send out reset message, to give things a chance to clean up
+            OnReset?.Invoke(this, EventArgs.Empty);
+
             // Reset all the statuses.
             Status = new ShipStatus();
             Cargo = new CargoStatus();
@@ -158,8 +164,7 @@ namespace EliteAPI
             Location = new LocationService(this);
             Discord = new DiscordService(this);
             StatusExtension = new StatusExtensionService(this);
-
-            OnReset?.Invoke(this, EventArgs.Empty);
+            EDSMApi = new EDSMService(this);
         }
 
         /// <summary>
