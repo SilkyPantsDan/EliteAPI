@@ -64,7 +64,7 @@ namespace EliteAPI.EDSM
 
         #region Journal
 
-        public async Task<string> UploadJournalEvents(List<Events.EventBase> events) 
+        public async Task<string> UploadJournalEvents(List<Journal.EDSMJournalEntry> events) 
         {
             if (this.Configuration == null) return ""; // TODO: Throw Exception
 
