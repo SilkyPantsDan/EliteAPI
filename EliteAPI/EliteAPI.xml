@@ -43,6 +43,11 @@
             The directory in which the Journals and status files are located.
             </summary>
         </member>
+        <member name="P:EliteAPI.EliteDangerousAPI.Bindings">
+            <summary>
+            Holds information on all key bindings in the game set by the user.
+            </summary>
+        </member>
         <member name="E:EliteAPI.EliteDangerousAPI.OnReady">
             <summary>
             Gets triggered when EliteAPI has successfully loaded up.
@@ -154,6 +159,31 @@
         <member name="P:EliteAPI.Events.EventBase.Event">
             <summary>
             The name of the event.
+            </summary>
+        </member>
+        <member name="T:EliteAPI.Events.IStarPosInfo">
+            <summary>
+            The interface every event with StarPos implements.
+            </summary>
+        </member>
+        <member name="P:EliteAPI.Events.IStarPosInfo.StarPos">
+            <summary>
+            The position of the destination star system in light years.
+            </summary>
+        </member>
+        <member name="T:EliteAPI.Events.IStarSystemInfo">
+            <summary>
+            The interface every event with StarPos implements.
+            </summary>
+        </member>
+        <member name="P:EliteAPI.Events.IStarSystemInfo.StarSystem">
+            <summary>
+            The name of the destination star system.
+            </summary>
+        </member>
+        <member name="P:EliteAPI.Events.IStarSystemInfo.SystemAddress">
+            <summary>
+            The address of the destination star system.aW
             </summary>
         </member>
         <member name="T:EliteAPI.Events.ModifierLabel">
@@ -1848,16 +1878,6 @@
             Whether the API is currently running.
             </summary>
         </member>
-        <member name="P:EliteAPI.IEliteDangerousAPI.JournalDirectory">
-            <summary>
-            The Journal directory that is being used by the API.
-            </summary>
-        </member>
-        <member name="P:EliteAPI.IEliteDangerousAPI.SkipCatchUp">
-            <summary>
-            Whether the API should skip the processing of previous events before the API was started.
-            </summary>
-        </member>
         <member name="P:EliteAPI.IEliteDangerousAPI.Events">
             <summary>
             Object that holds all the events.
@@ -1883,6 +1903,11 @@
             Gets triggered when EliteAPI has successfully loaded up.
             </summary>
         </member>
+        <member name="E:EliteAPI.IEliteDangerousAPI.OnReset">
+            <summary>
+            Gets triggered when EliteAPI has been reset.
+            </summary>
+        </member>
         <member name="P:EliteAPI.IEliteDangerousAPI.Discord">
             <summary>
             Rich presence service for Discord.
@@ -1893,22 +1918,15 @@
             Resets the API.
             </summary>
         </member>
-        <member name="M:EliteAPI.IEliteDangerousAPI.Start(System.Boolean)">
+        <member name="M:EliteAPI.IEliteDangerousAPI.Start">
             <summary>
             Starts the API.
             </summary>
-            <param name="runRichPresence"></param>
         </member>
         <member name="M:EliteAPI.IEliteDangerousAPI.Stop">
             <summary>
             Stops the API.
             </summary>
-        </member>
-        <member name="M:EliteAPI.IEliteDangerousAPI.ChangeJournal(System.IO.DirectoryInfo)">
-            <summary>
-            Changes the journal directory.
-            </summary>
-            <param name="newJournalDirectory"></param>
         </member>
         <member name="P:EliteAPI.Service.Discord.DiscordService.IsRunning">
             <summary>

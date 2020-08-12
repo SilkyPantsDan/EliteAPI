@@ -1,4 +1,5 @@
-﻿using EliteAPI.Service.Discord;
+﻿using EliteAPI.Bindings;
+using EliteAPI.Service.Discord;
 using EliteAPI.Service.EDSM;
 using EliteAPI.Service.Location;
 using EliteAPI.Service.StatusExtension;
@@ -20,7 +21,7 @@ using EventHandler = System.EventHandler;
 
 namespace EliteAPI
 {
-    public partial class EliteDangerousAPI
+    public partial class EliteDangerousAPI : IEliteDangerousAPI
     {
         public EliteDangerousAPI(EliteConfiguration configuration = null)
         {
@@ -39,6 +40,11 @@ namespace EliteAPI
         public bool IsRunning { get; private set; }
 
         public bool IsReady { get; private set; }
+
+        /// <summary>
+        /// Holds information on all key bindings in the game set by the user.
+        /// </summary>
+        public UserBindings Bindings { get; private set;}
 
         public Events.EventHandler Events { get; private set; } = new Events.EventHandler();
 

@@ -10,11 +10,13 @@ using EliteAPI.Events;
 using EliteAPI.Events.Startup;
 using EliteAPI.Events.Travel;
 
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EliteAPI.Tests")]
 namespace EliteAPI.Service.EDSM
 {
     public class EDSMService : IService {
 
-        class EDSMGameStatus : IEDSMGameStatus {
+        public class EDSMGameStatus : IEDSMGameStatus {
             public long? SystemId { get; set; }
             public string SystemName { get; set; }
             public IReadOnlyList<float> SystemCoordinates { get; set; }
@@ -43,14 +45,14 @@ namespace EliteAPI.Service.EDSM
         private EDSMGameStatus gameStatus = new EDSMGameStatus();
         public bool DisableSendEvents { get; set; } = true;
 
-
         private System.Timers.Timer uploadTimer;
         private readonly double BatchUploadTimerInterval = 5 * 60 * 1000; // 5 mins
-        Queue<EDSMJournalEntry> batchJournalEntries = new Queue<EDSMJournalEntry>();
+        internal List<EDSMJournalEntry> batchJournalEntries = new List<EDSMJournalEntry>();
+        internal int BatchedEventCount => this.batchJournalEntries.Count;
 
         public void SetConfiguration(EDSMConfiguration configuration) => edsmConnection.Configuration = configuration;
 
-        public EDSMService(EliteDangerousAPI api) {
+        public EDSMService(IEliteDangerousAPI api) {
             
             // Hook into events
             api.Events.AllEvent += HandleAllEvents;
@@ -131,7 +133,7 @@ namespace EliteAPI.Service.EDSM
 
             // Convert to JournalEntry and store for batch send later
             var journalEntry = EDSMJournalEntry.FromEliteEvent(e, this.gameStatus);
-            batchJournalEntries.Enqueue(journalEntry);
+            batchJournalEntries.Add(journalEntry);
         }
 
         #region EDSM Game Status Events

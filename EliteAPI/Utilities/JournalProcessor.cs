@@ -13,11 +13,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EliteAPI.Tests")]
 namespace EliteAPI.Utilities
 {
     internal static class JournalProcessor
     {
-        internal static EventBase TriggerEvents(string json, EliteDangerousAPI api)
+        internal static EventBase TriggerEvents(string json, IEliteDangerousAPI api)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace EliteAPI.Utilities
             return eventClass.GetMethod("Process", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
         }
 
-        private static EventBase TriggerEvent(MethodBase eventMethod, string json, EliteDangerousAPI api)
+        private static EventBase TriggerEvent(MethodBase eventMethod, string json, IEliteDangerousAPI api)
         {
             return eventMethod.Invoke(null, new object[] { json, api }) as EventBase;
         }

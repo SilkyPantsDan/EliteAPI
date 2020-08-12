@@ -121,7 +121,7 @@ namespace EliteAPI.Events.Travel
         [JsonProperty("DistFromStarLS")]
         public float DistFromStarLs { get; internal set; }
 
-        internal static DockedInfo Process(string json, EliteDangerousAPI api)
+        internal static DockedInfo Process(string json, IEliteDangerousAPI api)
         {
             return api.Events.InvokeDockedEvent(JsonConvert.DeserializeObject<DockedInfo>(json, JsonSettings.Settings));
         }

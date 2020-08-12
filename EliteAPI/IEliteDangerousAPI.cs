@@ -24,16 +24,6 @@ namespace EliteAPI
         bool IsRunning { get; }
 
         /// <summary>
-        /// The Journal directory that is being used by the API.
-        /// </summary>
-        DirectoryInfo JournalDirectory { get; }
-
-        /// <summary>
-        /// Whether the API should skip the processing of previous events before the API was started.
-        /// </summary>
-        bool SkipCatchUp { get; }
-
-        /// <summary>
         /// Object that holds all the events.
         /// </summary>
         Events.EventHandler Events { get; }
@@ -70,6 +60,11 @@ namespace EliteAPI
         event EventHandler OnReady;
 
         /// <summary>
+        /// Gets triggered when EliteAPI has been reset.
+        /// </summary>
+        event EventHandler OnReset;
+
+        /// <summary>
         /// Rich presence service for Discord.
         /// </summary>
         DiscordService Discord { get; }
@@ -82,18 +77,11 @@ namespace EliteAPI
         /// <summary>
         /// Starts the API.
         /// </summary>
-        /// <param name="runRichPresence"></param>
-        void Start(bool runRichPresence = true);
+        void Start();
 
         /// <summary>
         /// Stops the API.
         /// </summary>
         void Stop();
-
-        /// <summary>
-        /// Changes the journal directory.
-        /// </summary>
-        /// <param name="newJournalDirectory"></param>
-        void ChangeJournal(DirectoryInfo newJournalDirectory);
     }
 }

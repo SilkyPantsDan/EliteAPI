@@ -31,8 +31,8 @@ namespace EliteAPI.EDSM.Journal
 
         internal static EDSMJournalEntry FromEliteEvent(EventBase eliteEvent, IEDSMGameStatus gameStatus) 
         {
-            var eventJson = JsonConvert.SerializeObject(eliteEvent);
-            var journalEvent = JsonConvert.DeserializeObject<EDSMJournalEntry>(eventJson);
+            var eventJson = JsonConvert.SerializeObject(eliteEvent, JsonSettings.Settings);
+            var journalEvent = JsonConvert.DeserializeObject<EDSMJournalEntry>(eventJson, JsonSettings.Settings);
 
             journalEvent.ShipId = gameStatus.ShipId;
             journalEvent.SystemId = gameStatus.SystemId;
