@@ -8,7 +8,7 @@ namespace EliteAPI.Events.Travel
     /// <summary>
     /// This event is written when landed at a landing pad in a station, output or surface settlement.
     /// </summary>
-    public class DockedInfo : EventBase
+    public class DockedInfo : EventBase, IStarSystemInfo
     {
         internal DockedInfo() { }
 

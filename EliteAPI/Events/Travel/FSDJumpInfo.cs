@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EliteAPI.Events.Travel
 {
-    public class FSDJumpInfo : EventBase
+    public class FSDJumpInfo : EventBase, IStarPosInfo, IStarSystemInfo
     {
         internal FSDJumpInfo() { }
 

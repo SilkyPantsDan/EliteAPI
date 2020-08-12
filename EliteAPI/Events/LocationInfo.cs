@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace EliteAPI.Events
 {
-    public class LocationInfo : EventBase
+    public class LocationInfo : EventBase, IStarPosInfo, IStarSystemInfo
     {
         [JsonProperty("Docked")]
         public bool Docked { get; internal set; }
@@ -17,7 +17,7 @@ namespace EliteAPI.Events
         public long SystemAddress { get; internal set; }
 
         [JsonProperty("StarPos")]
-        public List<float> StarPos { get; internal set; }
+        public IReadOnlyList<float> StarPos { get; internal set; }
 
         [JsonProperty("SystemAllegiance")]
         public string SystemAllegiance { get; internal set; }

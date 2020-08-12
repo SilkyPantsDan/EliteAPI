@@ -1,10 +1,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using EliteAPI.EDSM;
 using EliteAPI.EDSM.Journal;
 using EliteAPI.Events;
 using EliteAPI.Events.Startup;
+using EliteAPI.Events.Travel;
 
 namespace EliteAPI.Service.EDSM
 {
@@ -13,7 +17,7 @@ namespace EliteAPI.Service.EDSM
         class EDSMGameStatus : IEDSMGameStatus {
             public long? SystemId { get; set; }
             public string SystemName { get; set; }
-            public List<float> SystemCoordinates { get; set; }
+            public IReadOnlyList<float> SystemCoordinates { get; set; }
             public long? StationId { get; set; }
             public string StationName { get; set; }
             public long? ShipId { get; set; }
@@ -38,6 +42,11 @@ namespace EliteAPI.Service.EDSM
         private List<string> discardedEvents = new List<string>();
         private EDSMGameStatus gameStatus = new EDSMGameStatus();
         public bool DisableSendEvents { get; set; } = true;
+
+
+        private System.Timers.Timer uploadTimer;
+        private readonly double BatchUploadTimerInterval = 5 * 60 * 1000; // 5 mins
+        Queue<EDSMJournalEntry> batchJournalEntries = new Queue<EDSMJournalEntry>();
 
         public void SetConfiguration(EDSMConfiguration configuration) => edsmConnection.Configuration = configuration;
 
@@ -67,6 +76,25 @@ namespace EliteAPI.Service.EDSM
             api.OnReset += HandleReset;
 
             edsmConnection = new EDSMConnection();
+
+            // Set up upload timer
+            this.uploadTimer = new System.Timers.Timer(BatchUploadTimerInterval); // 5 mins
+            this.uploadTimer.Elapsed += async (s, e) => { await SendBatchedEvents(); };
+            this.uploadTimer.AutoReset = true;
+            this.uploadTimer.Enabled = false;
+        }
+
+        private async Task SendBatchedEvents() {
+
+            if (this.batchJournalEntries.Count > 0) {
+                var copiedList = batchJournalEntries.ToList();
+                batchJournalEntries.Clear();
+
+                var result = await edsmConnection.UploadJournalEvents(copiedList);
+            }
+
+            // Reset the timer (in case it is called out of step, such as docking etc).
+            this.uploadTimer.Interval = BatchUploadTimerInterval;
         }
 
         private void HandleReset(object sender, EventArgs e)
@@ -84,11 +112,13 @@ namespace EliteAPI.Service.EDSM
 
         private void HandleShutDown(object sender, EventArgs e)
         {
+            this.uploadTimer.Enabled = false;
         }
 
         private async void HandleStartUp(object sender, EventArgs e)
         {
             this.discardedEvents = await edsmConnection.GetDiscardedEventTypes();
+            this.uploadTimer.Enabled = true;
         }
 
         private void HandleAllEvents(object sender, EventBase e)
@@ -98,6 +128,10 @@ namespace EliteAPI.Service.EDSM
 
             // Ignore Discarded Events
             if (this.discardedEvents.Contains(e.Event)) return;
+
+            // Convert to JournalEntry and store for batch send later
+            var journalEntry = EDSMJournalEntry.FromEliteEvent(e, this.gameStatus);
+            batchJournalEntries.Enqueue(journalEntry);
         }
 
         #region EDSM Game Status Events
@@ -133,7 +167,38 @@ namespace EliteAPI.Service.EDSM
 
         private void UpdateSystemStatus(object sender, EventBase e)
         {
-            throw new NotImplementedException();
+            if (e is DockedInfo)
+            {
+                var docked = e as DockedInfo;
+                this.gameStatus.StationId = docked.MarketId;
+                this.gameStatus.StationName = docked.StationName;
+            }    
+
+            if (e is IStarSystemInfo)
+            {
+                var starSystemInfo = e as IStarSystemInfo;
+            
+                if (starSystemInfo.StarSystem != this.gameStatus.SystemName)
+                {
+                    this.gameStatus.SystemCoordinates = null;
+                }
+
+                if (starSystemInfo.StarSystem != "ProvingGround" && starSystemInfo.StarSystem != "CQC") 
+                {
+                    this.gameStatus.SystemId = starSystemInfo.SystemAddress;
+                    this.gameStatus.SystemName = starSystemInfo.StarSystem;
+
+                    if (starSystemInfo is IStarPosInfo) {
+                        this.gameStatus.SystemCoordinates = (starSystemInfo as IStarPosInfo).StarPos;
+                    }
+                }
+                else 
+                {
+                    this.gameStatus.SystemId = null;
+                    this.gameStatus.SystemCoordinates = null;
+                    this.gameStatus.SystemId = null;
+                }
+            }
         }
 
         private void UpdateCrewStatus(object sender, ICrewInfo e)
